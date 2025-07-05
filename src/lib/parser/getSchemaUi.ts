@@ -97,31 +97,53 @@ class UiPropertyFactory {
     }
   }
 
-  static createOneOfProperty(oneOfProperties: Partial<OpenAPI.SchemaObject>[], name: string = ''): OAProperty {
-    return {
+  static createOneOfProperty(
+    oneOfProperties: Partial<OpenAPI.SchemaObject>[],
+    name: string = '',
+    baseSchema: Partial<OpenAPI.SchemaObject> = {},
+    required = false,
+  ): OAProperty {
+    const baseProperty = UiPropertyFactory.createBaseProperty(
       name,
+      baseSchema,
+      required,
+    )
+
+    return {
+      ...baseProperty,
       types: ['object'],
-      required: false,
+      required: baseProperty.required,
       properties: oneOfProperties.map((prop) => {
         const property = UiPropertyFactory.schemaToUiProperty('', prop)
         property.meta = { ...(property.meta || {}), isOneOfItem: true }
         return property
       }),
-      meta: { isOneOf: true },
+      meta: { ...(baseProperty.meta || {}), isOneOf: true },
     }
   }
 
-  static createAnyOfProperty(anyOfProperties: Partial<OpenAPI.SchemaObject>[], name: string = ''): OAProperty {
-    return {
+  static createAnyOfProperty(
+    anyOfProperties: Partial<OpenAPI.SchemaObject>[],
+    name: string = '',
+    baseSchema: Partial<OpenAPI.SchemaObject> = {},
+    required = false,
+  ): OAProperty {
+    const baseProperty = UiPropertyFactory.createBaseProperty(
       name,
+      baseSchema,
+      required,
+    )
+
+    return {
+      ...baseProperty,
       types: ['object'],
-      required: false,
+      required: baseProperty.required,
       properties: anyOfProperties.map((prop) => {
         const property = UiPropertyFactory.schemaToUiProperty('', prop)
         property.meta = { ...(property.meta || {}), isAnyOfItem: true }
         return property
       }),
-      meta: { isAnyOf: true },
+      meta: { ...(baseProperty.meta || {}), isAnyOf: true },
     }
   }
 
@@ -143,11 +165,21 @@ class UiPropertyFactory {
     }
 
     if (schema.oneOf) {
-      return UiPropertyFactory.createOneOfProperty(schema.oneOf, name)
+      return UiPropertyFactory.createOneOfProperty(
+        schema.oneOf,
+        name,
+        schema,
+        required,
+      )
     }
 
     if (schema.anyOf) {
-      return UiPropertyFactory.createAnyOfProperty(schema.anyOf, name)
+      return UiPropertyFactory.createAnyOfProperty(
+        schema.anyOf,
+        name,
+        schema,
+        required,
+      )
     }
 
     if (schema.const !== undefined) {

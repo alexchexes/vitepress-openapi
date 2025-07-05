@@ -447,6 +447,106 @@ const fixtures: Record<string, FixtureTest> = {
     },
   },
 
+  'anyOf property with description': {
+    jsonSchema: {
+      type: 'object',
+      properties: {
+        foo: {
+          description: 'Some description here...',
+          anyOf: [
+            {
+              type: 'array',
+              items: { type: 'string' },
+            },
+            { type: 'null' },
+          ],
+        },
+      },
+    },
+    schemaUi: {
+      name: '',
+      types: ['object'],
+      required: false,
+      properties: [
+        {
+          name: 'foo',
+          description: 'Some description here...',
+          types: ['object'],
+          required: false,
+          properties: [
+            {
+              name: '',
+              types: ['array'],
+              required: false,
+              subtype: 'string',
+              meta: { isAnyOfItem: true },
+            },
+            {
+              name: '',
+              types: ['null'],
+              required: false,
+              meta: { isAnyOfItem: true },
+            },
+          ],
+          meta: { isAnyOf: true },
+        },
+      ],
+    },
+    schemaUiJson: {
+      foo: ['string'],
+    },
+  },
+
+  'oneOf property with description': {
+    jsonSchema: {
+      type: 'object',
+      properties: {
+        foo: {
+          description: 'Some description here...',
+          oneOf: [
+            {
+              type: 'array',
+              items: { type: 'string' },
+            },
+            { type: 'null' },
+          ],
+        },
+      },
+    },
+    schemaUi: {
+      name: '',
+      types: ['object'],
+      required: false,
+      properties: [
+        {
+          name: 'foo',
+          description: 'Some description here...',
+          types: ['object'],
+          required: false,
+          properties: [
+            {
+              name: '',
+              types: ['array'],
+              required: false,
+              subtype: 'string',
+              meta: { isOneOfItem: true },
+            },
+            {
+              name: '',
+              types: ['null'],
+              required: false,
+              meta: { isOneOfItem: true },
+            },
+          ],
+          meta: { isOneOf: true },
+        },
+      ],
+    },
+    schemaUiJson: {
+      foo: ['string'],
+    },
+  },
+
   'nested oneOf schema': {
     jsonSchema: {
       oneOf: [
