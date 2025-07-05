@@ -474,7 +474,7 @@ const fixtures: Record<string, FixtureTest> = {
       properties: [
         {
           name: 'foo',
-          types: ['object'],
+          types: ['array', 'null'],
           required: false,
           description: 'Some description here...',
           properties: [

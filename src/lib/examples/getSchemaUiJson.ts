@@ -38,17 +38,19 @@ function uiPropertyToJson(property: OAProperty, useExample: boolean): any {
     }, useExample)
   }
 
+  if (isOneOfProperty(property)) {
+    return resolveOneOfProperty(property, useExample)
+  }
+
+  if (isAnyOfProperty(property)) {
+    return resolveAnyOfProperty(property, useExample)
+  }
+
   if (containsType(property, 'object')) {
-    if (isOneOfProperty(property)) {
-      return resolveOneOfProperty(property, useExample)
-    }
-    if (isAnyOfProperty(property)) {
-      return resolveAnyOfProperty(property, useExample)
-    }
     return uiPropertyObjectToJson(property.properties || [], useExample)
   }
 
-  return {}
+  return getDefaultValueForType(property.types[0] ?? 'string', property.defaultValue)
 }
 
 function uiPropertyArrayToJson(property: OAProperty, useExample: boolean): any {

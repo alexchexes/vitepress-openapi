@@ -104,9 +104,21 @@ class UiPropertyFactory {
   ): OAProperty {
     const baseProperty = UiPropertyFactory.createBaseProperty(
       name,
-      { ...baseSchema, type: 'object' },
+      baseSchema,
       false,
     )
+
+    const unionTypes = Array.from(
+      new Set(
+        oneOfProperties
+          .map(prop => determineSchemaType(prop as OpenAPI.SchemaObject))
+          .filter(Boolean),
+      ),
+    ) as JSONSchemaType[]
+
+    if (unionTypes.length > 0) {
+      baseProperty.types = unionTypes
+    }
 
     baseProperty.properties = oneOfProperties.map((prop) => {
       const property = UiPropertyFactory.schemaToUiProperty('', prop)
@@ -126,9 +138,21 @@ class UiPropertyFactory {
   ): OAProperty {
     const baseProperty = UiPropertyFactory.createBaseProperty(
       name,
-      { ...baseSchema, type: 'object' },
+      baseSchema,
       false,
     )
+
+    const unionTypes = Array.from(
+      new Set(
+        anyOfProperties
+          .map(prop => determineSchemaType(prop as OpenAPI.SchemaObject))
+          .filter(Boolean),
+      ),
+    ) as JSONSchemaType[]
+
+    if (unionTypes.length > 0) {
+      baseProperty.types = unionTypes
+    }
 
     baseProperty.properties = anyOfProperties.map((prop) => {
       const property = UiPropertyFactory.schemaToUiProperty('', prop)
