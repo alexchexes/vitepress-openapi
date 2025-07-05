@@ -466,6 +466,7 @@ const fixtures: Record<string, FixtureTest> = {
           description: 'Some description here...',
         },
       },
+      required: ['foo'],
     },
     schemaUi: {
       name: '',
@@ -475,7 +476,7 @@ const fixtures: Record<string, FixtureTest> = {
         {
           name: 'foo',
           types: ['array', 'null'],
-          required: false,
+          required: true,
           description: 'Some description here...',
           properties: [
             {
@@ -504,6 +505,41 @@ const fixtures: Record<string, FixtureTest> = {
     },
     schemaUiJson: {
       foo: ['string'],
+    },
+  },
+
+  'required oneOf property': {
+    jsonSchema: {
+      type: 'object',
+      properties: {
+        foo: {
+          oneOf: [
+            { type: 'string' },
+            { type: 'null' },
+          ],
+        },
+      },
+      required: ['foo'],
+    },
+    schemaUi: {
+      name: '',
+      types: ['object'],
+      required: false,
+      properties: [
+        {
+          name: 'foo',
+          types: ['string', 'null'],
+          required: true,
+          properties: [
+            { name: '', types: ['string'], required: false, meta: { isOneOfItem: true } },
+            { name: '', types: ['null'], required: false, meta: { isOneOfItem: true } },
+          ],
+          meta: { isOneOf: true },
+        },
+      ],
+    },
+    schemaUiJson: {
+      foo: 'string',
     },
   },
 

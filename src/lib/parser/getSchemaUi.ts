@@ -101,11 +101,12 @@ class UiPropertyFactory {
     oneOfProperties: Partial<OpenAPI.SchemaObject>[],
     name = '',
     baseSchema: Partial<OpenAPI.SchemaObject> = {},
+    required = false,
   ): OAProperty {
     const baseProperty = UiPropertyFactory.createBaseProperty(
       name,
       baseSchema,
-      false,
+      required,
     )
 
     const unionTypes = Array.from(
@@ -135,11 +136,12 @@ class UiPropertyFactory {
     anyOfProperties: Partial<OpenAPI.SchemaObject>[],
     name = '',
     baseSchema: Partial<OpenAPI.SchemaObject> = {},
+    required = false,
   ): OAProperty {
     const baseProperty = UiPropertyFactory.createBaseProperty(
       name,
       baseSchema,
-      false,
+      required,
     )
 
     const unionTypes = Array.from(
@@ -183,11 +185,11 @@ class UiPropertyFactory {
     }
 
     if (schema.oneOf) {
-      return UiPropertyFactory.createOneOfProperty(schema.oneOf, name, schema)
+      return UiPropertyFactory.createOneOfProperty(schema.oneOf, name, schema, required)
     }
 
     if (schema.anyOf) {
-      return UiPropertyFactory.createAnyOfProperty(schema.anyOf, name, schema)
+      return UiPropertyFactory.createAnyOfProperty(schema.anyOf, name, schema, required)
     }
 
     if (schema.const !== undefined) {
