@@ -367,6 +367,86 @@ const fixtures: Record<string, FixtureTest> = {
     },
   },
 
+  'anyOf schema': {
+    jsonSchema: {
+      anyOf: [
+        {
+          type: 'object',
+          properties: {
+            name: { type: 'string' },
+            age: { type: 'integer' },
+          },
+          required: ['name'],
+        },
+        {
+          type: 'object',
+          properties: {
+            name: { type: 'string' },
+            age: { type: 'integer' },
+            addresses: {
+              type: 'array',
+              items: {
+                type: 'object',
+                properties: {
+                  street: { type: 'string' },
+                },
+              },
+            },
+          },
+          required: ['name'],
+        },
+      ],
+    },
+    schemaUi: {
+      name: '',
+      types: ['object'],
+      properties: [
+        {
+          name: '',
+          properties: [
+            { name: 'name', types: ['string'], required: true },
+            { name: 'age', types: ['integer'], required: false },
+          ],
+          types: ['object'],
+          required: false,
+          meta: {
+            isAnyOfItem: true,
+          },
+        },
+        {
+          name: '',
+          properties: [
+            { name: 'name', types: ['string'], required: true },
+            { name: 'age', types: ['integer'], required: false },
+            {
+              name: 'addresses',
+              properties: [
+                { name: 'street', types: ['string'], required: false },
+              ],
+              required: false,
+              types: ['array'],
+              subtype: 'object',
+            },
+          ],
+          types: ['object'],
+          required: false,
+          meta: {
+            isAnyOfItem: true,
+          },
+        },
+      ],
+      required: false,
+      meta: {
+        isAnyOf: true,
+      },
+    },
+    // Takes first anyOf schema as default.
+    schemaUiJson: {
+      name: 'string',
+      age: 0,
+    },
+  },
+
   'nested oneOf schema': {
     jsonSchema: {
       oneOf: [

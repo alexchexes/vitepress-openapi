@@ -42,6 +42,9 @@ function uiPropertyToJson(property: OAProperty, useExample: boolean): any {
     if (isOneOfProperty(property)) {
       return resolveOneOfProperty(property, useExample)
     }
+    if (isAnyOfProperty(property)) {
+      return resolveAnyOfProperty(property, useExample)
+    }
     return uiPropertyObjectToJson(property.properties || [], useExample)
   }
 
@@ -51,6 +54,9 @@ function uiPropertyToJson(property: OAProperty, useExample: boolean): any {
 function uiPropertyArrayToJson(property: OAProperty, useExample: boolean): any {
   if (isOneOfProperty(property)) {
     return [resolveOneOfProperty(property, useExample)]
+  }
+  if (isAnyOfProperty(property)) {
+    return [resolveAnyOfProperty(property, useExample)]
   }
 
   if (property.meta?.hasPrefixItems && property.properties && Array.isArray(property.properties)) {
@@ -159,7 +165,19 @@ function isOneOfProperty(property: OAProperty): boolean {
   return !!property.meta?.isOneOf && Array.isArray(property.properties)
 }
 
+function isAnyOfProperty(property: OAProperty): boolean {
+  return !!property.meta?.isAnyOf && Array.isArray(property.properties)
+}
+
 function resolveOneOfProperty(property: OAProperty, useExample: boolean): any {
+  if (property.properties && property.properties.length > 0) {
+    return uiPropertyToJson(property.properties[0], useExample)
+  } else {
+    return useExample ? getPropertyExample(property) : getDefaultValueForType(property.types[0] ?? 'string', property.defaultValue)
+  }
+}
+
+function resolveAnyOfProperty(property: OAProperty, useExample: boolean): any {
   if (property.properties && property.properties.length > 0) {
     return uiPropertyToJson(property.properties[0], useExample)
   } else {

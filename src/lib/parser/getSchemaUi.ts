@@ -11,6 +11,8 @@ interface Metadata {
   isAdditionalProperties?: boolean
   isOneOf?: boolean
   isOneOfItem?: boolean
+  isAnyOf?: boolean
+  isAnyOfItem?: boolean
   isConstant?: boolean
   isPrefixItem?: boolean
   prefixItemIndex?: number
@@ -109,6 +111,20 @@ class UiPropertyFactory {
     }
   }
 
+  static createAnyOfProperty(anyOfProperties: Partial<OpenAPI.SchemaObject>[], name: string = ''): OAProperty {
+    return {
+      name,
+      types: ['object'],
+      required: false,
+      properties: anyOfProperties.map((prop) => {
+        const property = UiPropertyFactory.schemaToUiProperty('', prop)
+        property.meta = { ...(property.meta || {}), isAnyOfItem: true }
+        return property
+      }),
+      meta: { isAnyOf: true },
+    }
+  }
+
   static schemaToUiProperty(
     name: string,
     schema: Partial<OpenAPI.SchemaObject>,
@@ -128,6 +144,10 @@ class UiPropertyFactory {
 
     if (schema.oneOf) {
       return UiPropertyFactory.createOneOfProperty(schema.oneOf, name)
+    }
+
+    if (schema.anyOf) {
+      return UiPropertyFactory.createAnyOfProperty(schema.anyOf, name)
     }
 
     if (schema.const !== undefined) {
@@ -185,6 +205,15 @@ class UiPropertyFactory {
             return {
               ...UiPropertyFactory.schemaToUiProperty('', propSchema),
               meta: { ...(prop.meta || {}), isOneOfItem: true },
+            }
+          })
+        } else if (schema.items.anyOf) {
+          property.meta = { ...(property.meta || {}), isAnyOf: true }
+          property.properties = schema.items.anyOf.map((prop: any) => {
+            const propSchema = { ...prop, type: schema.items.type }
+            return {
+              ...UiPropertyFactory.schemaToUiProperty('', propSchema),
+              meta: { ...(prop.meta || {}), isAnyOfItem: true },
             }
           })
         }
