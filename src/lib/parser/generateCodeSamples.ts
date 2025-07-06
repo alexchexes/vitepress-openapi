@@ -1,10 +1,9 @@
-import type { OpenAPIV3 } from '@scalar/openapi-types'
 import type { OAExampleObject, ParsedOpenAPI, ParsedOperation, PlaygroundSecurityScheme } from '../../types'
 import { availableLanguages, useTheme } from '../../composables/useTheme'
+import { httpVerbs } from '../../index'
 import { buildRequest } from '../codeSamples/buildRequest'
 import { generateCodeSample } from '../codeSamples/generateCodeSample'
 import { resolveBaseUrl } from '../resolveBaseUrl'
-import { httpVerbs } from '../../index'
 
 export async function generateCodeSamples(spec: ParsedOpenAPI): Promise<ParsedOpenAPI> {
   if (!spec?.paths) {
