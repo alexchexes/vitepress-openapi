@@ -1,8 +1,8 @@
+import { OpenAPIV3 } from '@scalar/openapi-types'
+
 export { usePaths } from './composables/usePaths'
 export { useSidebar } from './composables/useSidebar'
 export { OpenApi } from './lib/OpenApi'
-
-import { OpenAPIV3 } from '@scalar/openapi-types'
 
 export const httpVerbs: readonly OpenAPIV3.HttpMethods[] = [
   OpenAPIV3.HttpMethods.GET,
