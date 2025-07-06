@@ -4,6 +4,7 @@ import { availableLanguages, useTheme } from '../../composables/useTheme'
 import { buildRequest } from '../codeSamples/buildRequest'
 import { generateCodeSample } from '../codeSamples/generateCodeSample'
 import { resolveBaseUrl } from '../resolveBaseUrl'
+import { httpVerbs } from '../../index'
 
 export async function generateCodeSamples(spec: ParsedOpenAPI): Promise<ParsedOpenAPI> {
   if (!spec?.paths) {
@@ -13,8 +14,8 @@ export async function generateCodeSamples(spec: ParsedOpenAPI): Promise<ParsedOp
   const baseUrl = resolveBaseUrl(spec.servers?.[0]?.url || '')
 
   for (const [path, pathObject] of Object.entries(spec.paths)) {
-    for (const verb of Object.keys(pathObject) as OpenAPIV3.HttpMethods[]) {
-      const operation = pathObject[verb] as ParsedOperation
+    for (const verb of httpVerbs) {
+      const operation = (pathObject as Record<string, any>)[verb] as ParsedOperation
 
       if (!operation) {
         continue
