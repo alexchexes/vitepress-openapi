@@ -18,11 +18,11 @@ const availableSidebarItemsTypes = [
   'default',
   'itemsByTags',
   'itemsByPaths',
-]
+] as const
 
 const requestBodyViews = ['schema', 'contentType']
 const jsonViewerRenderers = ['vue-json-pretty', 'shiki']
-const responseCodeSelectors = ['tabs', 'select']
+const responseCodeSelectors = ['select', 'tabs']
 const playgroundModes = ['text', 'tree', 'table']
 const operationBadges = ['deprecated', 'operationId']
 </script>
@@ -31,38 +31,45 @@ const operationBadges = ['deprecated', 'operationId']
   <div
     class="flex flex-col gap-4 p-2 overflow-y-auto"
   >
-    <div class="flex flex-col gap-2">
-      <h3>VitePress</h3>
-      <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 items-start gap-4">
-        <label for="showSidebar" class="flex items-center gap-2">
-          <input
-            id="showSidebar"
-            type="checkbox"
-            :checked="sandboxData.showSidebar.value"
-            @change="sandboxData.showSidebar.value = $event.target.checked"
-          >
-          Show sidebar
-        </label>
+    <div class="flex flex-wrap gap-2 justify-between">
+      <div class="flex flex-col gap-2">
+        <h3>VitePress</h3>
+        <div class="flex flex-wrap items-start gap-4">
+          <label for="showSidebar" class="flex items-center gap-2">
+            <input
+              id="showSidebar"
+              type="checkbox"
+              :checked="sandboxData.showSidebar.value"
+              @change="sandboxData.showSidebar.value = ($event.target as any).checked"
+            >
+            Show sidebar
+          </label>
 
-        <label for="showAside" class="flex items-center gap-2">
-          <input
-            id="showAside"
-            type="checkbox"
-            :checked="sandboxData.showAside.value"
-            @change="sandboxData.showAside.value = $event.target.checked"
-          >
-          Show aside
-        </label>
+          <label for="showAside" class="flex items-center gap-2">
+            <input
+              id="showAside"
+              type="checkbox"
+              :checked="sandboxData.showAside.value"
+              @change="sandboxData.showAside.value = ($event.target as any).checked"
+            >
+            Show aside
+          </label>
+        </div>
+      </div>
+      <div class="flex flex-col gap-2">
+        <h3>i18n</h3>
+        <div class="flex flex-wrap gap-2">
+          <OALocaleSelect />
+        </div>
       </div>
     </div>
-
 
     <div
       v-if="sandboxData.showSidebar.value"
       class="flex flex-col gap-2"
     >
       <h3>Sidebar</h3>
-      <div class="grid grid-cols-2 gap-2">
+      <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-x-4">
         <label
           v-for="type in availableSidebarItemsTypes"
           :key="type"
@@ -81,10 +88,11 @@ const operationBadges = ['deprecated', 'operationId']
           <input
             id="depth"
             type="number"
+            class="bg-[--vp-input-bg-color] rounded p-2"
             min="1"
             max="6"
             :value="sandboxData.sidebarItemsDepth.value"
-            @input="sandboxData.sidebarItemsDepth.value = $event.target.value"
+            @input="sandboxData.sidebarItemsDepth.value = ($event.target as any).value"
           >
         </label>
         <label v-if="sandboxData.sidebarItemsType.value === 'itemsByPaths'" for="collapsible" class="flex items-center gap-2">
@@ -92,23 +100,16 @@ const operationBadges = ['deprecated', 'operationId']
             id="collapsible"
             type="checkbox"
             :checked="sandboxData.sidebarItemsCollapsible.value"
-            @change="sandboxData.sidebarItemsCollapsible.value = $event.target.checked"
+            @change="sandboxData.sidebarItemsCollapsible.value = ($event.target as any).checked"
           >
           Collapsible
         </label>
-      </div>
-  </div>
-
-  <div class="flex flex-col gap-2">
-      <h3>i18n</h3>
-      <div class="grid grid-cols-2 gap-2">
-        <OALocaleSelect />
       </div>
     </div>
 
     <div class="flex flex-col gap-2">
       <h3>Pages</h3>
-      <div class="grid grid-cols-2 gap-2">
+      <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-x-4">
         <label
           v-for="component in availablePagesTypes"
           :key="component"
@@ -129,13 +130,13 @@ const operationBadges = ['deprecated', 'operationId']
       class="flex flex-col gap-2"
     >
       <h3>Spec</h3>
-      <div class="grid grid-cols-3 items-start gap-4">
+      <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 items-start gap-x-4">
         <label for="groupByTags" class="flex items-center gap-2">
           <input
             id="groupByTags"
             type="checkbox"
             :checked="themeConfig.getSpecConfig().groupByTags.value"
-            @change="themeConfig.setSpecConfig({ groupByTags: $event.target.checked })"
+            @change="themeConfig.setSpecConfig({ groupByTags: ($event.target as any).checked })"
           >
           Group by tags
         </label>
@@ -146,7 +147,7 @@ const operationBadges = ['deprecated', 'operationId']
               id="collapsePaths"
               type="checkbox"
               :checked="themeConfig.getSpecConfig().collapsePaths.value"
-              @change="themeConfig.setSpecConfig({ collapsePaths: $event.target.checked })"
+              @change="themeConfig.setSpecConfig({ collapsePaths: ($event.target as any).checked })"
             >
             Collapse paths
           </label>
@@ -160,7 +161,7 @@ const operationBadges = ['deprecated', 'operationId']
             id="showPathsSummary"
             type="checkbox"
             :checked="themeConfig.getSpecConfig().showPathsSummary.value"
-            @change="themeConfig.setSpecConfig({ showPathsSummary: $event.target.checked })"
+            @change="themeConfig.setSpecConfig({ showPathsSummary: ($event.target as any).checked })"
           >
           Show paths summary
         </label>
@@ -170,7 +171,7 @@ const operationBadges = ['deprecated', 'operationId']
             id="avoidCirculars"
             type="checkbox"
             :checked="themeConfig.getSpecConfig().avoidCirculars.value"
-            @change="themeConfig.setSpecConfig({ avoidCirculars: $event.target.checked })"
+            @change="themeConfig.setSpecConfig({ avoidCirculars: ($event.target as any).checked })"
           >
           Avoid circulars
         </label>
@@ -180,7 +181,7 @@ const operationBadges = ['deprecated', 'operationId']
             id="lazyRendering"
             type="checkbox"
             :checked="themeConfig.getSpecConfig().lazyRendering.value"
-            @change="themeConfig.setSpecConfig({ lazyRendering: $event.target.checked })"
+            @change="themeConfig.setSpecConfig({ lazyRendering: ($event.target as any).checked })"
           >
           Lazy rendering
         </label>
@@ -190,7 +191,7 @@ const operationBadges = ['deprecated', 'operationId']
             id="wrapExamples"
             type="checkbox"
             :checked="themeConfig.getWrapExamples()"
-            @change="themeConfig.setSpecConfig({ wrapExamples: $event.target.checked })"
+            @change="themeConfig.setSpecConfig({ wrapExamples: ($event.target as any).checked })"
           >
           Wrap examples
         </label>
@@ -200,7 +201,7 @@ const operationBadges = ['deprecated', 'operationId']
             id="disableDownload"
             type="checkbox"
             :checked="themeConfig.getSpecDisableDownload()"
-            @change="themeConfig.setSpecConfig({ disableDownload: $event.target.checked })"
+            @change="themeConfig.setSpecConfig({ disableDownload: ($event.target as any).checked })"
           >
           Disable download
         </label>
@@ -209,7 +210,7 @@ const operationBadges = ['deprecated', 'operationId']
 
     <div class="flex flex-col gap-2">
       <h3>Request Body</h3>
-      <div class="grid grid-cols-2 gap-2">
+      <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-x-4">
         <label v-for="view in requestBodyViews" :key="view" class="flex items-center gap-2">
           <input
             type="radio"
@@ -223,39 +224,43 @@ const operationBadges = ['deprecated', 'operationId']
 
     <div class="flex flex-col gap-2">
       <h3>JSON Viewer</h3>
-      <div class="grid grid-cols-2 gap-2">
+      <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-x-4">
+        <div class="inline-flex flex-wrap gap-2">
+          <label v-for="renderer in jsonViewerRenderers" :key="renderer" class="flex items-center gap-2">
+            <input
+              type="radio"
+              :checked="themeConfig.getJsonViewerRenderer() === renderer"
+              @change="themeConfig.setJsonViewerRenderer(renderer as any)"
+            >
+            {{ renderer }}
+          </label>
+        </div>
         <label for="jsonViewerDeep" class="flex items-center gap-2">
           <span>Depth</span>
           <input
             id="jsonViewerDeep"
             type="number"
+            class="bg-[--vp-input-bg-color] rounded p-2"
             min="1"
             :value="themeConfig.getJsonViewerDeep()"
-            @input="themeConfig.setJsonViewerDeep(Number($event.target.value))"
+            @input="themeConfig.setJsonViewerDeep(Number(($event.target as any).value))"
           >
-        </label>
-        <label v-for="renderer in jsonViewerRenderers" :key="renderer" class="flex items-center gap-2">
-          <input
-            type="radio"
-            :checked="themeConfig.getJsonViewerRenderer() === renderer"
-            @change="themeConfig.setJsonViewerRenderer(renderer as any)"
-          >
-          {{ renderer }}
         </label>
       </div>
     </div>
 
     <div class="flex flex-col gap-2">
       <h3>Schema Viewer</h3>
-      <div class="grid grid-cols-2 gap-2">
+      <div class="flex flex-wrap gap-2">
         <label for="schemaViewerDeep" class="flex items-center gap-2">
           <span>Depth</span>
           <input
             id="schemaViewerDeep"
             type="number"
+            class="bg-[--vp-input-bg-color] rounded p-2"
             min="1"
             :value="themeConfig.getSchemaViewerDeep()"
-            @input="themeConfig.setSchemaViewerDeep(Number($event.target.value))"
+            @input="themeConfig.setSchemaViewerDeep(Number(($event.target as any).value))"
           >
         </label>
       </div>
@@ -263,7 +268,7 @@ const operationBadges = ['deprecated', 'operationId']
 
     <div class="flex flex-col gap-2">
       <h3>Response</h3>
-      <div class="grid grid-cols-2 gap-2">
+      <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-x-4">
         <label v-for="type in responseCodeSelectors" :key="type" class="flex items-center gap-2">
           <input
             type="radio"
@@ -272,35 +277,37 @@ const operationBadges = ['deprecated', 'operationId']
           >
           {{ type }}
         </label>
-        <label for="responseMaxTabs" class="flex items-center gap-2">
+        <label v-if="themeConfig.getResponseCodeSelector() === 'tabs'" for="responseMaxTabs" class="flex items-center gap-2">
           <span>Max tabs</span>
           <input
             id="responseMaxTabs"
             type="number"
+            class="bg-[--vp-input-bg-color] rounded p-2"
             min="1"
             :value="themeConfig.getResponseCodeMaxTabs()"
-            @input="themeConfig.setResponseCodeMaxTabs(Number($event.target.value))"
+            @input="themeConfig.setResponseCodeMaxTabs(Number(($event.target as any).value))"
           >
         </label>
-        <div class="flex flex-col gap-1">
-          <span>Body view</span>
-          <div class="flex gap-2">
-            <label v-for="view in requestBodyViews" :key="'resp-' + view" class="flex items-center gap-2">
-              <input
-                type="radio"
-                :checked="themeConfig.getResponseBodyDefaultView() === view"
-                @change="themeConfig.setResponseBodyDefaultView(view as any)"
-              >
-              {{ view }}
-            </label>
-          </div>
+      </div>
+
+      <div class="flex flex-col gap-1">
+        <span>Body view</span>
+        <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-x-4">
+          <label v-for="view in requestBodyViews" :key="`resp-${view}`" class="flex items-center gap-2">
+            <input
+              type="radio"
+              :checked="themeConfig.getResponseBodyDefaultView() === view"
+              @change="themeConfig.setResponseBodyDefaultView(view as any)"
+            >
+            {{ view }}
+          </label>
         </div>
       </div>
     </div>
 
     <div class="flex flex-col gap-2">
       <h3>Playground</h3>
-      <div class="grid grid-cols-2 gap-2">
+      <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-x-4">
         <label v-for="mode in playgroundModes" :key="mode" class="flex items-center gap-2">
           <input
             type="radio"
@@ -309,12 +316,14 @@ const operationBadges = ['deprecated', 'operationId']
           >
           {{ mode }}
         </label>
+      </div>
+      <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-x-4">
         <label for="playgroundMainMenuBar" class="flex items-center gap-2">
           <input
             id="playgroundMainMenuBar"
             type="checkbox"
             :checked="themeConfig.getPlaygroundJsonEditorMainMenuBar()"
-            @change="themeConfig.setPlaygroundJsonEditorMainMenuBar($event.target.checked)"
+            @change="themeConfig.setPlaygroundJsonEditorMainMenuBar(($event.target as any).checked)"
           >
           Main menu bar
         </label>
@@ -323,7 +332,7 @@ const operationBadges = ['deprecated', 'operationId']
             id="playgroundNavigationBar"
             type="checkbox"
             :checked="themeConfig.getPlaygroundJsonEditorNavigationBar()"
-            @change="themeConfig.setPlaygroundJsonEditorNavigationBar($event.target.checked)"
+            @change="themeConfig.setPlaygroundJsonEditorNavigationBar(($event.target as any).checked)"
           >
           Navigation bar
         </label>
@@ -332,7 +341,7 @@ const operationBadges = ['deprecated', 'operationId']
             id="playgroundStatusBar"
             type="checkbox"
             :checked="themeConfig.getPlaygroundJsonEditorStatusBar()"
-            @change="themeConfig.setPlaygroundJsonEditorStatusBar($event.target.checked)"
+            @change="themeConfig.setPlaygroundJsonEditorStatusBar(($event.target as any).checked)"
           >
           Status bar
         </label>
@@ -341,14 +350,14 @@ const operationBadges = ['deprecated', 'operationId']
 
     <div class="flex flex-col gap-2">
       <h3>Security</h3>
-      <div class="grid grid-cols-2 gap-2">
-        <label for="defaultScheme" class="flex items-center gap-2">
+      <div class="flex flex-wrap gap-2">
+        <label class="flex items-center gap-2">
           <span>Default scheme</span>
           <input
-            id="defaultScheme"
             type="text"
+            class="bg-[--vp-input-bg-color] rounded p-2"
             :value="themeConfig.getSecurityDefaultScheme() || ''"
-            @input="themeConfig.setSecurityDefaultScheme($event.target.value || null)"
+            @input="themeConfig.setSecurityDefaultScheme(($event.target as any).value || null)"
           >
         </label>
       </div>
@@ -356,53 +365,24 @@ const operationBadges = ['deprecated', 'operationId']
 
     <div class="flex flex-col gap-2">
       <h3>Server</h3>
-      <div class="grid grid-cols-2 gap-2">
-        <label for="allowCustomServer" class="flex items-center gap-2">
+      <div class="flex flex-wrap gap-2">
+        <label class="flex items-center gap-2">
           <input
-            id="allowCustomServer"
             type="checkbox"
             :checked="themeConfig.getServerAllowCustomServer()"
-            @change="themeConfig.setServerConfig({ allowCustomServer: $event.target.checked })"
+            @change="themeConfig.setServerConfig({ allowCustomServer: ($event.target as any).checked })"
           >
           Allow custom server
         </label>
       </div>
     </div>
 
-    <div class="flex flex-col gap-2">
+    <div class="flex flex-col gap-4">
       <h3>Operation</h3>
-      <div class="grid grid-cols-2 gap-4">
-        <div>
-          <h5>Hidden Slots</h5>
-          <div class="grid grid-cols-2 gap-2">
-            <label v-for="slot in DEFAULT_OPERATION_SLOTS" :key="slot" class="flex items-center gap-2">
-              <input
-                type="checkbox"
-                :checked="themeConfig.getOperationHiddenSlots().includes(slot)"
-                @change="themeConfig.getOperationHiddenSlots().includes(slot) ? themeConfig.getOperationHiddenSlots().splice(themeConfig.getOperationHiddenSlots().indexOf(slot), 1) : themeConfig.getOperationHiddenSlots().push(slot)"
-              >
-              {{ slot }}
-            </label>
-          </div>
-        </div>
-
-        <div>
-          <h5>Badges</h5>
-          <div class="grid grid-cols-2 gap-2">
-            <label v-for="badge in operationBadges" :key="badge" class="flex items-center gap-2">
-              <input
-                type="checkbox"
-                :checked="themeConfig.getOperationBadges().includes(badge)"
-                @change="themeConfig.getOperationBadges().includes(badge) ? themeConfig.setOperationBadges(themeConfig.getOperationBadges().filter(b => b !== badge)) : themeConfig.setOperationBadges([...themeConfig.getOperationBadges(), badge])"
-              >
-              {{ badge }}
-            </label>
-          </div>
-        </div>
-
-        <div>
+      <div class="flex flex-col gap-2">
+        <div class="flex flex-col gap-2">
           <h5>Operation Columns</h5>
-          <div class="grid grid-cols-2 gap-2">
+          <div class="flex flex-wrap gap-x-4">
             <label v-for="col in [1, 2]" :key="col" class="flex items-center gap-2">
               <input
                 type="radio"
@@ -415,14 +395,42 @@ const operationBadges = ['deprecated', 'operationId']
         </div>
 
         <div>
+          <h5>Hidden Slots</h5>
+          <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-x-4">
+            <label v-for="slot in DEFAULT_OPERATION_SLOTS" :key="slot" class="flex items-center gap-2">
+              <input
+                type="checkbox"
+                :checked="themeConfig.getOperationHiddenSlots().includes(slot)"
+                @change="themeConfig.getOperationHiddenSlots().includes(slot) ? themeConfig.getOperationHiddenSlots().splice(themeConfig.getOperationHiddenSlots().indexOf(slot), 1) : themeConfig.getOperationHiddenSlots().push(slot)"
+              >
+              {{ slot }}
+            </label>
+          </div>
+        </div>
+
+        <div class="flex flex-col gap-2">
+          <h5>Badges</h5>
+          <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-x-4">
+            <label v-for="badge in operationBadges" :key="badge" class="flex items-center gap-2">
+              <input
+                type="checkbox"
+                :checked="themeConfig.getOperationBadges().includes(badge)"
+                @change="themeConfig.getOperationBadges().includes(badge) ? themeConfig.setOperationBadges(themeConfig.getOperationBadges().filter(b => b !== badge)) : themeConfig.setOperationBadges([...themeConfig.getOperationBadges(), badge])"
+              >
+              {{ badge }}
+            </label>
+          </div>
+        </div>
+
+        <div class="flex flex-col gap-2">
           <h5>Path</h5>
-          <div class="grid grid-cols-2 gap-2">
+          <div class="flex flex-col gap-2">
             <label for="showBaseUrl" class="flex items-center gap-2">
               <input
                 id="showBaseUrl"
                 type="checkbox"
                 :checked="themeConfig.getShowBaseURL()"
-                @change="themeConfig.setShowBaseURL($event.target.checked)"
+                @change="themeConfig.setShowBaseURL(($event.target as any).checked)"
               >
               Show base URL
             </label>
@@ -431,8 +439,9 @@ const operationBadges = ['deprecated', 'operationId']
               <input
                 id="defaultBaseUrl"
                 type="text"
+                class="bg-[--vp-input-bg-color] rounded p-2"
                 :value="themeConfig.getOperationDefaultBaseUrl()"
-                @input="themeConfig.setOperationDefaultBaseUrl($event.target.value)"
+                @input="themeConfig.setOperationDefaultBaseUrl(($event.target as any).value)"
               >
             </label>
           </div>
