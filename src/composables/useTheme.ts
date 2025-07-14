@@ -152,7 +152,7 @@ export interface OperationLinkConfig {
 export interface MarkdownConfig {
   operationLink?: OperationLinkConfig | false
   externalLinksNewTab?: boolean
-  setup?: (md: MarkdownIt) => MarkdownIt | void
+  config?: (md: MarkdownIt) => MarkdownIt | void
 }
 
 export interface UseThemeConfig {
@@ -362,7 +362,7 @@ const defaultValues = {
       linkPrefix: DEFAULT_OPERATIONS_PREFIX,
     },
     externalLinksNewTab: false,
-    setup: undefined,
+    config: undefined,
   },
 }
 
@@ -452,7 +452,7 @@ const themeConfig: UseThemeConfig = {
       linkPrefix: defaultValues.markdown.operationLink.linkPrefix,
     },
     externalLinksNewTab: defaultValues.markdown.externalLinksNewTab,
-    setup: defaultValues.markdown.setup,
+    config: defaultValues.markdown.config,
   },
 }
 
@@ -1043,8 +1043,8 @@ export function useTheme(initialConfig: PartialUseThemeConfig = {}) {
       markdown.externalLinksNewTab = config.externalLinksNewTab
     }
 
-    if (config.setup !== undefined) {
-      markdown.setup = config.setup
+    if (config.config !== undefined) {
+      markdown.config = config.config
     }
   }
 

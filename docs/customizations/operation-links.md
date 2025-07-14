@@ -118,14 +118,19 @@ useTheme({
 })
 ```
 
-You can also customize the Markdown renderer with the `setup` callback:
+You can also customize the Markdown renderer with the `config` callback:
 
 ```ts
 useTheme({
   markdown: {
-    setup: md => {
+    config: md => {
       // add custom markdown-it plugins
-      return md
+      md.use(myPlugin, myParams)
+      return;
+
+      // or return your own instance
+      myMd = (/* ... */)
+      return myMd
     },
   },
 })

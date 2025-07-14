@@ -6,7 +6,7 @@ import { useTheme } from './useTheme'
 export function useMarkdown() {
   const theme = useTheme()
   const operationLinkConfig = theme.getOperationLinkConfig()
-  const { externalLinksNewTab, setup } = theme.getMarkdownConfig()
+  const { externalLinksNewTab, config } = theme.getMarkdownConfig()
 
   let md = markdownit({
     html: true,
@@ -31,9 +31,9 @@ export function useMarkdown() {
     md.use(operationLink, operationLinkConfig)
   }
 
-  if (setup) {
+  if (config) {
     // user can mutate existing md to add plugins or return completely different instance
-    md = setup(md) || md
+    md = config(md) || md
   }
 
   function render(content: string) {

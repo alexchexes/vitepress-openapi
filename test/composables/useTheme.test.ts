@@ -775,11 +775,11 @@ describe('markdown configuration', () => {
     expect(result).toBe(false)
   })
 
-  it('stores the markdown setup callback', () => {
-    const setup = () => {}
-    themeConfig.setMarkdownConfig({ setup })
+  it('stores the markdown config callback', () => {
+    const configFn = () => {}
+    themeConfig.setMarkdownConfig({ config: configFn })
     const result = themeConfig.getMarkdownConfig()
-    expect(result.setup).toBe(setup)
+    expect(result.config).toBe(configFn)
   })
 })
 

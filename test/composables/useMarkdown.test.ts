@@ -50,12 +50,12 @@ describe('useMarkdown', () => {
     expect(result).not.toContain('OAOperationLink')
   })
 
-  it('calls setup function from markdown config', () => {
+  it('calls config function from markdown config', () => {
     const theme = useTheme()
     theme.reset()
-    const setup = vi.fn((md: MarkdownIt) => md)
-    theme.setMarkdownConfig({ setup })
+    const configFn = vi.fn((md: MarkdownIt) => md)
+    theme.setMarkdownConfig({ config: configFn })
     useMarkdown()
-    expect(setup).toHaveBeenCalled()
+    expect(configFn).toHaveBeenCalled()
   })
 })
