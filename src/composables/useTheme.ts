@@ -10,11 +10,11 @@ import { generateCodeSample } from '../lib/codeSamples/generateCodeSample'
 import { deepUnref } from '../lib/deepUnref'
 import { locales } from '../locales'
 
-function ensureNestedProperty<T, K extends keyof T>(obj: T, key: K): NonNullable<T[K]> {
+function ensureNestedProperty<T, K extends keyof T>(obj: T, key: K): Exclude<NonNullable<T[K]>, false> {
   if (!obj[key]) {
     obj[key] = {} as T[K]
   }
-  return obj[key] as NonNullable<T[K]>
+  return obj[key] as Exclude<NonNullable<T[K]>, false>
 }
 
 function ensureRefProperty<T, K extends keyof T, V>(obj: T, key: K, propName: string, value: V): Ref<V> {
