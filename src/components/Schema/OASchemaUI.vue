@@ -212,20 +212,30 @@ const enumAttr = computed(() => ({ [t('Valid values')]: props.property.enum }))
         </div>
       </CollapsibleTrigger>
 
-      <OAMarkdown
-        v-if="props.property?.description"
-        :content="props.property.description"
-        class="text-sm"
-        :class="{
-          'pl-2': isObjectOrArray,
-        }"
-      />
+      <template v-if="!isObjectOrArray">
+        <OAMarkdown
+          v-if="props.property?.description"
+          :content="props.property.description"
+          class="text-sm"
+          :class="{
+            'pl-2': isObjectOrArray,
+          }"
+        />
 
-      <OASchemaPropertyAttributes v-if="props.property.enum" :property="enumAttr" />
-
-      <OASchemaPropertyAttributes v-if="props.property.constraints" :property="props.property.constraints" />
+        <OASchemaPropertyAttributes v-if="props.property.enum" :property="enumAttr" />
+        <OASchemaPropertyAttributes v-if="props.property.constraints" :property="props.property.constraints" />
+      </template>
 
       <CollapsibleContent v-if="isObjectOrArray" class="ml-2 pl-2 border-l border-l-solid">
+        <OAMarkdown
+          v-if="props.property?.description"
+          :content="props.property.description"
+          class="text-sm"
+        />
+
+        <OASchemaPropertyAttributes v-if="props.property.enum" :property="enumAttr" />
+        <OASchemaPropertyAttributes v-if="props.property.constraints" :property="props.property.constraints" />
+
         <Badge
           v-if="isUnion"
           variant="outline"
