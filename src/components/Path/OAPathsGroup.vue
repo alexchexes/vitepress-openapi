@@ -47,9 +47,11 @@ function onPathClick(hash: string) {
 <template>
   <Collapsible v-model:open="isOpen">
     <div v-if="props.group.isGrouped">
-      <OAHeading level="h1">
-        {{ props.group.name }}
-      </OAHeading>
+      <slot name="oa-paths-group-header" :group="props.group">
+        <OAHeading level="h1">
+          {{ props.group.name }}
+        </OAHeading>
+      </slot>
 
       <div
         class="grid grid-cols-1 gap-6 md:gap-10 my-[16px]"
